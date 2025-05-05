@@ -21,7 +21,7 @@ https://final-web-project-one.vercel.app/
 
 ## Running Locally
 1. Clone the repository:  
-   `git clone https://github.com/yourusername/responsive-multi-page-website.git`
+   https://github.com/Maggy6973/final-web-project.git
 2. Open `index.html` in any modern browser.
 
 ## Project Structure
