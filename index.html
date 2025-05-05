@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Responsive Multi-Page Website</title>
+<style>
+  /* Reset & base styles */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin:0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f8fa;
+    color: #333;
+    line-height: 1.6;
+  }
+  a {
+    color: #007acc;
+    text-decoration: none;
+  }
+  a:hover, a:focus {
+    text-decoration: underline;
+  }
+
+  /* Layout */
+  header {
+    background-color: #007acc;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+  }
+  nav {
+    margin-top: 1rem;
+  }
+  nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  nav li {
+    margin: 0 1rem;
+  }
+  nav button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    transition: color 0.3s ease;
+  }
+  nav button[aria-current="page"] {
+    border-bottom: 2px solid #ffdd57;
+    font-weight: bold;
+  }
+  nav button:hover, nav button:focus {
+    color: #ffdd57;
+    outline: none;
+  }
+
+  /* Main content area for pages */
+  main > section {
+    display: none;
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  main > section.active {
+    display: block;
+  }
+  
+  /* Home page styles */
+  .slider {
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    user-select: none;
+  }
+  .slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+  .slide {
+    min-width: 100%;
+    pointer-events: none;
+  }
+  .slide img {
+    width: 100%;
+    display: block;
+    border-radius: 10px;
+  }
+  .slider-controls {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    pointer-events: all;
+  }
+  .slider-controls button {
+    background-color: rgba(0,0,0,0.4);
+    border: none;
+    color: white;
+    font-size: 2rem;
+    padding: 0 12px;
+    cursor: pointer;
+    border-radius: 50%;
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
+  .slider-controls button:hover, .slider-controls button:focus {
+    background-color: rgba(0,0,0,0.75);
+    outline: none;
+  }
+  .slider-dots {
+    text-align: center;
+    margin-top: 0.75rem;
+  }
+  .slider-dots button {
+    border: none;
+    background-color: #bbb;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+    padding: 0;
+  }
+  .slider-dots button.active {
+    background-color: #007acc;
+  }
+
+  /* About page styles */
+  #about h2 {
+    margin-bottom: 1rem;
+    color: #007acc;
+  }
+  #about p {
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+
+  /* Contact page styles */
+  #contact h2 {
+    margin-bottom: 1rem;
+    color: #007acc;
+  }
+  form {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  fieldset {
+    border: none;
+    padding: 0;
+    margin-bottom: 1rem;
+  }
+  label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  textarea:focus {
+    border-color: #007acc;
+    outline: none;
+  }
+  textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+  .error-message {
+    color: #d93025;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+  }
+  button[type="submit"] {
+    background-color: #007acc;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button[type="submit"]:hover,
+  button[type="submit"]:focus {
+    background-color: #005fa3;
+    outline: none;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+    background-color: #f0f0f0;
+    color: #666;
+    margin-top: 3rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    nav ul {
+      flex-direction: column;
+    }
+    nav li {
+      margin: 0.3rem 0;
+    }
+    main > section {
+      margin: 1rem 0.5rem;
+      padding: 0 0.5rem;
+    }
+  }
+
+  @media (max-width: 350px) {
+    header {
+      font-size: 1.2rem;
+      padding: 0.75rem;
+    }
+    nav button {
+      font-size: 0.9rem;
+      padding: 0.4rem 0;
+    }
+    .slider-controls button {
+      font-size: 1.5rem;
+      padding: 0 8px;
+    }
+    button[type="submit"] {
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>My Website</h1>
+  <nav aria-label="Primary navigation">
+    <ul>
+      <li><button type="button" aria-current="page" id="nav-home">Home</button></li>
+      <li><button type="button" id="nav-about">About</button></li>
+      <li><button type="button" id="nav-contact">Contact</button></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section id="home" class="active" role="region" aria-label="Home page">
+    <article>
+      <h2>Welcome to Our Website</h2>
+      <p>Explore our site to learn more about us!</p>
+      <div class="slider" aria-label="Image slider" role="region">
+        <div class="slides">
+          <div class="slide" aria-hidden="false"><img src="https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=350" alt="Sunset over mountains" /></div>
+          <div class="slide" aria-hidden="true"><img src="https://images.pexels.com/photos/34950/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=350" alt="Forest pathway in autumn" /></div>
+          <div class="slide" aria-hidden="true"><img src="https://images.pexels.com/photos/31906840/pexels-photo-31906840/free-photo-of-stunning-rocky-coastline-with-clear-blue-ocean.jpeg?auto=compress&cs=tinysrgb&w=600" weight=350 height=400 alt="Calm sea with rocks" /></div>
+        </div>
+        <div class="slider-controls">
+          <button type="button" id="prev-slide" aria-label="Previous slide">&#10094;</button>
+          <button type="button" id="next-slide" aria-label="Next slide">&#10095;</button>
+        </div>
+        <div class="slider-dots" role="tablist" aria-label="Slide controls">
+          <button aria-label="Slide 1" role="tab" aria-selected="true" id="dot-0"></button>
+          <button aria-label="Slide 2" role="tab" aria-selected="false" id="dot-1"></button>
+          <button aria-label="Slide 3" role="tab" aria-selected="false" id="dot-2"></button>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section id="about" role="region" aria-label="About page">
+    <article>
+      <h2>About Us</h2>
+      <p>We are a team of passionate developers dedicated to creating beautiful and functional web experiences. Our mission is to design websites that look great, work well across all devices, and meet the needs of our users.</p>
+      <p>This site demonstrates modern web design practices including responsive layouts, semantic HTML5, CSS3 styling, and interactivity through JavaScript.</p>
+    </article>
+  </section>
+
+  <section id="contact" role="region" aria-label="Contact page">
+    <article>
+      <h2>Contact Us</h2>
+      <form id="contact-form" novalidate>
+        <fieldset>
+          <label for="name">Name *</label>
+          <input type="text" id="name" name="name" required aria-required="true" aria-describedby="name-error" />
+          <div class="error-message" id="name-error"></div>
+        </fieldset>
+        <fieldset>
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" required aria-required="true" aria-describedby="email-error" />
+          <div class="error-message" id="email-error"></div>
+        </fieldset>
+        <fieldset>
+          <label for="message">Message *</label>
+          <textarea id="message" name="message" required aria-required="true" aria-describedby="message-error"></textarea>
+          <div class="error-message" id="message-error"></div>
+        </fieldset>
+        <button type="submit">Send Message</button>
+        <div role="alert" aria-live="polite" id="form-status" style="margin-top:1rem; font-weight:600;"></div>
+      </form>
+    </article>
+  </section>
+</main>
+
+<footer>
+  <p>© 2024 My Responsive Website. All rights reserved.</p>
+</footer>
+
+<script>
+  // Navigation button elements
+  const navButtons = {
+    home: document.getElementById('nav-home'),
+    about: document.getElementById('nav-about'),
+    contact: document.getElementById('nav-contact')
+  };
+
+  // Page sections
+  const pages = {
+    home: document.getElementById('home'),
+    about: document.getElementById('about'),
+    contact: document.getElementById('contact')
+  };
+
+  // Function to switch pages
+  function showPage(page) {
+    for (const key in pages) {
+      if (pages.hasOwnProperty(key)) {
+        if (key === page) {
+          pages[key].classList.add('active');
+          navButtons[key].setAttribute('aria-current', 'page');
+          pages[key].setAttribute('aria-hidden', 'false');
+        } else {
+          pages[key].classList.remove('active');
+          navButtons[key].removeAttribute('aria-current');
+          pages[key].setAttribute('aria-hidden', 'true');
+        }
+      }
+    }
+  }
+  // Set initial ARIA hidden attributes
+  for (const key in pages) {
+    if (pages.hasOwnProperty(key)) {
+      if (!pages[key].classList.contains('active')) {
+        pages[key].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+
+  // Add click event listeners for navigation
+  navButtons.home.addEventListener('click', () => showPage('home'));
+  navButtons.about.addEventListener('click', () => showPage('about'));
+  navButtons.contact.addEventListener('click', () => showPage('contact'));
+
+  // Image slider implementation
+  const slidesContainer = document.querySelector('.slides');
+  const slides = document.querySelectorAll('.slide');
+  const prevBtn = document.getElementById('prev-slide');
+  const nextBtn = document.getElementById('next-slide');
+  const dots = document.querySelectorAll('.slider-dots button');
+  let currentSlide = 0;
+  const totalSlides = slides.length;
+
+  function updateSlider() {
+    slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+    slides.forEach((slide, idx) => {
+      slide.setAttribute('aria-hidden', idx !== currentSlide);
+    });
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === currentSlide);
+      dot.setAttribute('aria-selected', idx === currentSlide ? "true" : "false");
+    });
+  }
+
+  function goToSlide(index) {
+    currentSlide = (index + totalSlides) % totalSlides;
+    updateSlider();
+  }
+
+  prevBtn.addEventListener('click', () => {
+    goToSlide(currentSlide - 1);
+  });
+  nextBtn.addEventListener('click', () => {
+    goToSlide(currentSlide + 1);
+  });
+  dots.forEach((dot, idx) => {
+    dot.addEventListener('click', () => {
+      goToSlide(idx);
+    });
+  });
+
+  // Auto-slide every 5 seconds
+  let sliderInterval = setInterval(() => {
+    goToSlide(currentSlide + 1);
+  }, 5000);
+
+  // Pause auto sliding on mouseover and resume on mouseout
+  const slider = document.querySelector('.slider');
+  slider.addEventListener('mouseenter', () => clearInterval(sliderInterval));
+  slider.addEventListener('mouseleave', () => {
+    sliderInterval = setInterval(() => {
+      goToSlide(currentSlide + 1);
+    }, 5000);
+  });
+
+  // Form validation
+  const form = document.getElementById('contact-form');
+  const formStatus = document.getElementById('form-status');
+
+  function showError(input, message) {
+    const errorDiv = document.getElementById(input.id + '-error');
+    errorDiv.textContent = message;
+    input.setAttribute('aria-invalid', 'true');
+  }
+
+  function clearError(input) {
+    const errorDiv = document.getElementById(input.id + '-error');
+    errorDiv.textContent = '';
+    input.removeAttribute('aria-invalid');
+  }
+
+  function validateEmail(email) {
+    // Basic email regex
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  }
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    formStatus.textContent = '';
+    let valid = true;
+
+    const name = form.name;
+    const email = form.email;
+    const message = form.message;
+
+    // Validate name
+    if (!name.value.trim()) {
+      showError(name, 'Please enter your name.');
+      valid = false;
+    } else {
+      clearError(name);
+    }
+
+    // Validate email
+    if (!email.value.trim()) {
+      showError(email, 'Please enter your email.');
+      valid = false;
+    } else if (!validateEmail(email.value.trim())) {
+      showError(email, 'Please enter a valid email address.');
+      valid = false;
+    } else {
+      clearError(email);
+    }
+
+    // Validate message
+    if (!message.value.trim()) {
+      showError(message, 'Please enter your message.');
+      valid = false;
+    } else {
+      clearError(message);
+    }
+
+    if (valid) {
+      // Simulate form submission
+      formStatus.textContent = 'Thank you for your message! We will get back to you soon.';
+      form.reset();
+    } else {
+      formStatus.textContent = '';
+    }
+  });
+
+  // Initialize slider state
+  updateSlider();
+</script>
+</body>
+</html>
+
